@@ -1,0 +1,32 @@
+language: node_js
+os: linux
+node_js:
+  - 12.14.1
+branches:
+  only:
+    - master
+before_deploy:
+  - rm -rf node_modules
+  - zip -r server.zip * .*
+  - mkdir -p zip
+  - mv server.zip zip/server.zip
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: jang3
+    skip_cleanup: true
+    local_dir: zip
+    region: ap-northeast-2
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: jang3
+    key: server.zip
+    application: jang3app
+    deployment_group: jang3group
+    region: ap-northeast-2
+notifications:
+  email:
+    recipients:
+      - sijk0331@gmail.com
