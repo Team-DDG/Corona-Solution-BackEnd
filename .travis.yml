@@ -4,7 +4,7 @@ node_js:
   - 12.14.1
 branches:
   only:
-    - master
+    - release
 before_deploy:
   - rm -rf node_modules
   - zip -r server.zip * .*
@@ -18,6 +18,8 @@ deploy:
     skip_cleanup: true
     local_dir: zip
     region: ap-northeast-2
+    on:
+      branch: release
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
@@ -26,6 +28,8 @@ deploy:
     application: jang3app
     deployment_group: jang3group
     region: ap-northeast-2
+    on:
+      branch: release
 notifications:
   email:
     recipients:
