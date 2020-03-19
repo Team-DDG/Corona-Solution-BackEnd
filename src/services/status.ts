@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { IPersonStatus, ISidoStatus, IPatientStatus, IMedicalInstitutionStatus } from "../interfaces/IStatus";
-import { ILocationDTO } from "../interfaces/Ilocation";
+import { ILocationDTO } from "../interfaces/ILocation";
 import { getManager } from "typeorm";
 
 export default class StatusService {

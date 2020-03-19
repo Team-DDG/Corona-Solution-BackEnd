@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import StatusService from "../../services/status";
 import { ISidoStatus, IPatientStatus, IMedicalInstitutionStatus } from "../../interfaces/IStatus";
-import { ILocationDTO } from "../../interfaces/Ilocation";
+import { ILocationDTO } from "../../interfaces/ILocation";
 
 const router: Router = Router();
 
