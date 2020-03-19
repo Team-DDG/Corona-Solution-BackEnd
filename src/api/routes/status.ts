@@ -44,4 +44,17 @@ export default (app: Router) => {
             return next(err);
         }
     });
+
+    router.get('/hospital', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const locationDTO: ILocationDTO = req.query;
+            const statusServiceInstance: StatusService = new StatusService();
+            const hospitalStatus: { baseDate: string, result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getHospitalStatus(locationDTO);
+    
+            return res.status(200).json(hospitalStatus);
+        } catch (err) {
+            console.error(err);
+            return next(err);
+        }
+    });
 };
