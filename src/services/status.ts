@@ -59,13 +59,9 @@ export default class StatusService {
         }
     };
 
-    public async getClinicStatus({ lat, lng }: ILocationDTO): Promise<{ baseDate: string, result: IMedicalInstitutionStatus[] }> {
+    public async getClinicStatus({ lat, lng }: ILocationDTO): Promise<{ result: IMedicalInstitutionStatus[] }> {
         try {
-            const { data } = await axios.get("https://www.mohw.go.kr/react/popup_200128_3.html");
-            const $ = cheerio.load(data);
             const manager = getManager();
-
-            const baseDate: string = $("div.viewtop").text().split("황")[1].trim();
             const clinics = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from clinic having distance <= 3 order by distance;`);
             const result: IMedicalInstitutionStatus[] = [];
 
@@ -74,19 +70,15 @@ export default class StatusService {
                 result.push({ name, address, phone, lat, lng });
             });
 
-            return { baseDate, result };
+            return { result };
         } catch (err) {
             throw err;
         }
     };
 
-    public async getHospitalStatus({ lat, lng }: ILocationDTO): Promise<{ baseDate: string, result: IMedicalInstitutionStatus[] }> {
+    public async getHospitalStatus({ lat, lng }: ILocationDTO): Promise<{ result: IMedicalInstitutionStatus[] }> {
         try {
-            const { data } = await axios.get("https://www.mohw.go.kr/react/popup_200128.html");
-            const $ = cheerio.load(data);
             const manager = getManager();
-
-            const baseDate: string = $("div.viewtop").text().split("황")[1].trim();
             const hospitals = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from hospital having distance <= 3 order by distance;`);
             const result: IMedicalInstitutionStatus[] = [];
 
@@ -95,7 +87,7 @@ export default class StatusService {
                 result.push({ name, address, phone, lat, lng });
             });
 
-            return { baseDate, result };
+            return { result };
         } catch (err) {
             throw err;
         }
