@@ -6,9 +6,9 @@ import { ILocationDTO } from "../../interfaces/ILocation";
 const router: Router = Router();
 
 export default (app: Router) => {
-    app.use('/status', router);
+    app.use("/status", router);
 
-    router.get('/sido', async (req: Request, res: Response, next: NextFunction) => {
+    router.get("/sido", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const statusServiceInstance: StatusService = new StatusService();
             const sidoStatus : { baseDate: string, result: ISidoStatus[] } = await statusServiceInstance.getSidoStatus();
@@ -20,7 +20,7 @@ export default (app: Router) => {
         }
     });
 
-    router.get('/patient', async (req: Request, res: Response, next: NextFunction) => {
+    router.get("/patient", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const statusServiceInstance: StatusService = new StatusService();
             const patientStatus: { baseDate: string, result: IPatientStatus } = await statusServiceInstance.getPatientStatus();
@@ -32,7 +32,7 @@ export default (app: Router) => {
         }
     });
 
-    router.get('/clinic', async (req: Request, res: Response, next: NextFunction) => {
+    router.get("/clinic", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const locationDTO: ILocationDTO = req.query;
             const statusServiceInstance: StatusService = new StatusService();
@@ -45,7 +45,7 @@ export default (app: Router) => {
         }
     });
 
-    router.get('/hospital', async (req: Request, res: Response, next: NextFunction) => {
+    router.get("/hospital", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const locationDTO: ILocationDTO = req.query;
             const statusServiceInstance: StatusService = new StatusService();
