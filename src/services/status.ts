@@ -9,7 +9,7 @@ export default class StatusService {
         try {
             const { data } = await axios.get("http://ncov.mohw.go.kr/");
             const $ = cheerio.load(data);
-            const sidoStatus = $("div.maplist").children().not(".info_map_script").not("h3").not("#mapAll").not('#map_city18');;
+            const sidoStatus = $("div.rpsa_detail").children().children().not(".info_map_script").not("h3").not("#mapAll").not('#map_city18');
             const baseDate: string = $("div.live_right span.livedate").text();
             const result: ISidoStatus[] = [];
 
