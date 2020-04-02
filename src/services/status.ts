@@ -33,7 +33,7 @@ export default class StatusService {
             const $ = cheerio.load(data);
             const totals = $("ul.liveNum span.num");
             const befores = $("ul.liveNum span.before");
-            const baseDate: string = $("div.live_left span.livedate").text();
+            const baseDate: string = $("div.liveNumOuter span.livedate").text();
 
             const confirmed: IPersonStatus = {
                 total: totals.eq(0).text().split(')')[1],
