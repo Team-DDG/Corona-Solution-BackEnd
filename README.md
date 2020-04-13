@@ -9,3 +9,4 @@
 - Cheerio
 - Travis CI
 - AWS RDS
+- AWS CloudFront
