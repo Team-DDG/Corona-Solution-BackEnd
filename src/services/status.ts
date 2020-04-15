@@ -31,10 +31,10 @@ export default class StatusService {
         try {
             const { data } = await axios.get("http://ncov.mohw.go.kr/");
             const $ = cheerio.load(data);
-            const totals = $("ul.liveNum span.num");
-            const befores = $("ul.liveNum span.before");
+            const totals = $("div.liveNum ul span.num");
+            const befores = $("div.liveNum ul span.before");
             const baseDate: string = $("div.liveNumOuter span.livedate").text();
-
+            console.log(totals.text())
             const confirmed: IPersonStatus = {
                 total: totals.eq(0).text().split(')')[1],
                 before: befores.eq(0).eq(0).text().split('비 ')[1]
