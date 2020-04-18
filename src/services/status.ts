@@ -34,7 +34,7 @@ export default class StatusService {
             const totals = $("div.liveNum ul span.num");
             const befores = $("div.liveNum ul span.before");
             const baseDate: string = $("div.liveNumOuter span.livedate").text();
-            console.log(totals.text())
+
             const confirmed: IPersonStatus = {
                 total: totals.eq(0).text().split(')')[1],
                 before: befores.eq(0).eq(0).text().split('비 ')[1]
@@ -59,31 +59,14 @@ export default class StatusService {
         }
     };
 
-    public async getClinicStatus({ lat, lng }: ILocationDTO): Promise<{ result: IMedicalInstitutionStatus[] }> {
+    public async getClinicOrHospitalStatus({ lat, lng }: ILocationDTO, table: 'clinic' | 'hospital'): Promise<{ result: IMedicalInstitutionStatus[] }> {
         try {
             const manager = getManager();
-            const clinics = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from clinic having distance <= 3 order by distance;`);
+            const infos = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from ${table} having distance <= 3 order by distance;`);
             const result: IMedicalInstitutionStatus[] = [];
 
-            clinics.forEach((clinic: IMedicalInstitutionStatus) => {
-                const { name, address, phone, lat, lng }: IMedicalInstitutionStatus = clinic;
-                result.push({ name, address, phone, lat, lng });
-            });
-
-            return { result };
-        } catch (err) {
-            throw err;
-        }
-    };
-
-    public async getHospitalStatus({ lat, lng }: ILocationDTO): Promise<{ result: IMedicalInstitutionStatus[] }> {
-        try {
-            const manager = getManager();
-            const hospitals = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from hospital having distance <= 3 order by distance;`);
-            const result: IMedicalInstitutionStatus[] = [];
-
-            hospitals.forEach((hospital: IMedicalInstitutionStatus) => {
-                const { name, address, phone, lat, lng }: IMedicalInstitutionStatus = hospital;
+            infos.forEach((info: IMedicalInstitutionStatus) => {
+                const { name, address, phone, lat, lng }: IMedicalInstitutionStatus = info;
                 result.push({ name, address, phone, lat, lng });
             });
 
