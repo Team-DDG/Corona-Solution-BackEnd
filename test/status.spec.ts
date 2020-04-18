@@ -30,12 +30,12 @@ describe('/api/status', async () => {
     it('GET /clinic', async () => {
         const clinicStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus({ lat: 37.56, lng: 126.98 }, "clinic");
         
-        expect(clinicStatus.result[0]).to.have.keys("name", "address", "phone", "lat", "lng");
+        expect(clinicStatus.result[0]).to.have.all.keys("name", "address", "phone", "lat", "lng");
     });
 
     it('GET /hospital', async () => {
         const hospitalStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus({ lat: 37.56, lng: 126.98 }, "hospital");
     
-        expect(hospitalStatus.result[0]).to.have.keys("name", "address", "phone", "lat", "lng");
+        expect(hospitalStatus.result[0]).to.have.all.keys("name", "address", "phone", "lat", "lng");
     });
 });
