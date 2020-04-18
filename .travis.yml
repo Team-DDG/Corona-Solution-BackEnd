@@ -2,9 +2,6 @@ language: node_js
 os: linux
 node_js:
   - 12.14.1
-branches:
-  only:
-    - master
 before_deploy:
   - rm -rf node_modules
   - zip -r server.zip * .*
