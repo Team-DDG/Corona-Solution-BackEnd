@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "test": "mocha -r ts-node/register test/*.spec.ts --exit"
+    "test": "mocha -r ts-node/register test/*.spec.ts --timeout 5000 --exit"
   },
   "author": "HoseungJang",
   "license": "ISC",
