@@ -36,7 +36,7 @@ export default (app: Router) => {
         try {
             const locationDTO: ILocationDTO = req.query;
             const statusServiceInstance: StatusService = new StatusService();
-            const clinicStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicStatus(locationDTO);
+            const clinicStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus(locationDTO, 'clinic');
     
             return res.status(200).json(clinicStatus);
         } catch (err) {
@@ -49,7 +49,7 @@ export default (app: Router) => {
         try {
             const locationDTO: ILocationDTO = req.query;
             const statusServiceInstance: StatusService = new StatusService();
-            const hospitalStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getHospitalStatus(locationDTO);
+            const hospitalStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus(locationDTO, 'hospital');
     
             return res.status(200).json(hospitalStatus);
         } catch (err) {
