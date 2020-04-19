@@ -66,7 +66,7 @@ export default class StatusService {
             const manager = getManager();
 
             const baseDate: string = $("div.viewtop").text().split("황")[1].trim();
-            const clinics = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from clinic having distance <= 1 order by distance;`);
+            const clinics = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from clinic having distance <= 3 order by distance;`);
             const result: IMedicalInstitutionStatus[] = [];
 
             clinics.forEach((clinic: IMedicalInstitutionStatus) => {
@@ -87,7 +87,7 @@ export default class StatusService {
             const manager = getManager();
 
             const baseDate: string = $("div.viewtop").text().split("황")[1].trim();
-            const hospitals = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from hospital having distance <= 1 order by distance;`);
+            const hospitals = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from hospital having distance <= 3 order by distance;`);
             const result: IMedicalInstitutionStatus[] = [];
 
             hospitals.forEach((hospital: IMedicalInstitutionStatus) => {
