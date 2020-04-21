@@ -11,14 +11,29 @@ export default class StatusService {
         try {
             const { data } = await axios.get("http://ncov.mohw.go.kr/");
             const $ = cheerio.load(data);
-            const sidoStatus = $("div.rpsa_detail").children().children().not(".info_map_script").not("h3").not("#mapAll").not('#map_city18');
+            const sidoStatus = $("div.rpsa_detail")
+                .children()
+                .children()
+                .not(".info_map_script")
+                .not("h3")
+                .not("#mapAll")
+                .not('#map_city18');
             const baseDate: string = $("div.live_right span.livedate").text();
             const result: ISidoStatus[] = [];
 
             sidoStatus.each(function (i, elem) {
                 const sido: string = $(this).find(".cityname").text();
-                const confirmed: string = $(this).find(".cityinfo").children().find("span.num").eq(0).eq(0).text();
-                const dead: string = $(this).find(".cityinfo").children().find("span.num").eq(1).eq(0).text();
+                const confirmed: string = $(this).find(".cityinfo")
+                    .children().find("span.num")
+                    .eq(0)
+                    .eq(0)
+                    .text();
+                const dead: string = $(this).find(".cityinfo")
+                    .children()
+                    .find("span.num")
+                    .eq(1)
+                    .eq(0)
+                    .text();
 
                 result.push({ sido, confirmed, dead });
             });
