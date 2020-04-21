@@ -16,7 +16,7 @@ export interface IPatientStatus {
     dead: IPersonStatus;
 }
 
-export interface IMedicalInstitutionStatus {
+export interface IHospitalStatus {
     name: string;
     address: string;
     phone: string;
