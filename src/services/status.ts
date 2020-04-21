@@ -1,9 +1,11 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { IPersonStatus, ISidoStatus, IPatientStatus, IMedicalInstitutionStatus } from "../interfaces/IStatus";
+import { Service } from "typedi";
+import { IPersonStatus, ISidoStatus, IPatientStatus, IHospitalStatus } from "../interfaces/IStatus";
 import { ILocationDTO } from "../interfaces/ILocation";
 import { getManager } from "typeorm";
 
+@Service()
 export default class StatusService {
     public async getSidoStatus(): Promise<{ baseDate: string, result: ISidoStatus[] }> {
         try {
@@ -59,14 +61,14 @@ export default class StatusService {
         }
     };
 
-    public async getClinicOrHospitalStatus({ lat, lng }: ILocationDTO, table: 'clinic' | 'hospital'): Promise<{ result: IMedicalInstitutionStatus[] }> {
+    public async getHospitalStatus({ lat, lng }: ILocationDTO, table: 'clinic' | 'hospital'): Promise<{ result: IHospitalStatus[] }> {
         try {
             const manager = getManager();
             const infos = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from ${table} having distance <= 3 order by distance;`);
-            const result: IMedicalInstitutionStatus[] = [];
+            const result: IHospitalStatus[] = [];
 
-            infos.forEach((info: IMedicalInstitutionStatus) => {
-                const { name, address, phone, lat, lng }: IMedicalInstitutionStatus = info;
+            infos.forEach((info: IHospitalStatus) => {
+                const { name, address, phone, lat, lng }: IHospitalStatus = info;
                 result.push({ name, address, phone, lat, lng });
             });
 

@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import StatusService from "../src/services/status";
-import { ISidoStatus, IPatientStatus, IMedicalInstitutionStatus } from "../src/interfaces/IStatus";
+import { Container } from "typedi";
 import { createConnection } from "typeorm";
+import StatusService from "../src/services/status";
+import { ISidoStatus, IPatientStatus, IHospitalStatus } from "../src/interfaces/IStatus";
 
-const statusServiceInstance: StatusService = new StatusService();
+const statusServiceInstance: StatusService = Container.get(StatusService);
 
 describe('/api/status', async () => {
     it('GET /sido', async () => {
@@ -28,13 +29,13 @@ describe('/api/status', async () => {
     });
 
     it('GET /clinic', async () => {
-        const clinicStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus({ lat: 37.56, lng: 126.98 }, "clinic");
+        const clinicStatus: { result: IHospitalStatus[] } = await statusServiceInstance.getHospitalStatus({ lat: 37.56, lng: 126.98 }, "clinic");
         
         expect(clinicStatus.result[0]).to.have.all.keys("name", "address", "phone", "lat", "lng");
     });
 
     it('GET /hospital', async () => {
-        const hospitalStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus({ lat: 37.56, lng: 126.98 }, "hospital");
+        const hospitalStatus: { result: IHospitalStatus[] } = await statusServiceInstance.getHospitalStatus({ lat: 37.56, lng: 126.98 }, "hospital");
     
         expect(hospitalStatus.result[0]).to.have.all.keys("name", "address", "phone", "lat", "lng");
     });

@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { Container } from "typedi"
 import StatusService from "../../services/status";
-import { ISidoStatus, IPatientStatus, IMedicalInstitutionStatus } from "../../interfaces/IStatus";
+import { ISidoStatus, IPatientStatus, IHospitalStatus } from "../../interfaces/IStatus";
 import { ILocationDTO } from "../../interfaces/ILocation";
 
 const router: Router = Router();
@@ -10,7 +11,7 @@ export default (app: Router) => {
 
     router.get("/sido", async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const statusServiceInstance: StatusService = new StatusService();
+            const statusServiceInstance: StatusService = Container.get(StatusService);
             const sidoStatus : { baseDate: string, result: ISidoStatus[] } = await statusServiceInstance.getSidoStatus();
 
             return res.status(200).json(sidoStatus);
@@ -22,7 +23,7 @@ export default (app: Router) => {
 
     router.get("/patient", async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const statusServiceInstance: StatusService = new StatusService();
+            const statusServiceInstance: StatusService = Container.get(StatusService);
             const patientStatus: { baseDate: string, result: IPatientStatus } = await statusServiceInstance.getPatientStatus();
 
             return res.status(200).json(patientStatus);
@@ -35,8 +36,8 @@ export default (app: Router) => {
     router.get("/clinic", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const locationDTO: ILocationDTO = req.query;
-            const statusServiceInstance: StatusService = new StatusService();
-            const clinicStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus(locationDTO, 'clinic');
+            const statusServiceInstance: StatusService = Container.get(StatusService);
+            const clinicStatus: { result: IHospitalStatus[] } = await statusServiceInstance.getHospitalStatus(locationDTO, 'clinic');
     
             return res.status(200).json(clinicStatus);
         } catch (err) {
@@ -48,8 +49,8 @@ export default (app: Router) => {
     router.get("/hospital", async (req: Request, res: Response, next: NextFunction) => {
         try {
             const locationDTO: ILocationDTO = req.query;
-            const statusServiceInstance: StatusService = new StatusService();
-            const hospitalStatus: { result: IMedicalInstitutionStatus[] } = await statusServiceInstance.getClinicOrHospitalStatus(locationDTO, 'hospital');
+            const statusServiceInstance: StatusService = Container.get(StatusService);
+            const hospitalStatus: { result: IHospitalStatus[] } = await statusServiceInstance.getHospitalStatus(locationDTO, 'hospital');
     
             return res.status(200).json(hospitalStatus);
         } catch (err) {
