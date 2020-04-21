@@ -5,7 +5,7 @@ import * as express from "express";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-async function startServer() {
+function startServer() {
     const app: Application = express();
     
     loader({ app });
