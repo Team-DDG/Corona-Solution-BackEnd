@@ -11,7 +11,7 @@ describe('/api/status', async () => {
         const sidoStatus: { baseDate: string, result: ISidoStatus[] } = await statusServiceInstance.getSidoStatus();
         
         expect(sidoStatus.baseDate).to.have.lengthOf.at.least(1);
-        expect(sidoStatus.result).to.have.lengthOf(17);
+        expect(sidoStatus.result).to.have.lengthOf(18);
     });
 
     it('GET /patient', async () => {

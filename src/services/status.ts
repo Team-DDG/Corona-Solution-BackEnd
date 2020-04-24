@@ -17,7 +17,6 @@ export default class StatusService {
                 .not(".info_map_script")
                 .not("h3")
                 .not("#mapAll")
-                .not('#map_city18');
             const baseDate: string = $("div.live_right span.livedate").text();
             const result: ISidoStatus[] = [];
 
