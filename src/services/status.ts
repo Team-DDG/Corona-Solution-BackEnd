@@ -11,28 +11,20 @@ export default class StatusService {
         try {
             const { data } = await axios.get("http://ncov.mohw.go.kr/");
             const $ = cheerio.load(data);
+            const baseDate: string = $("div.live_right span.livedate").text();
             const sidoStatus = $("div.rpsa_detail")
                 .children()
                 .children()
                 .not(".info_map_script")
                 .not("h3")
-                .not("#mapAll")
-            const baseDate: string = $("div.live_right span.livedate").text();
+                .not("#mapAll");
             const result: ISidoStatus[] = [];
 
             sidoStatus.each(function (i, elem) {
                 const sido: string = $(this).find(".cityname").text();
-                const confirmed: string = $(this).find(".cityinfo")
-                    .children().find("span.num")
-                    .eq(0)
-                    .eq(0)
-                    .text();
-                const dead: string = $(this).find(".cityinfo")
-                    .children()
-                    .find("span.num")
-                    .eq(1)
-                    .eq(0)
-                    .text();
+                const nums = $(this).find(".cityinfo span.num");
+                const confirmed: string = nums.eq(0).text();
+                const dead: string = nums.eq(3).text();
 
                 result.push({ sido, confirmed, dead });
             });
@@ -50,24 +42,25 @@ export default class StatusService {
             const totals = $("div.liveNum ul span.num");
             const befores = $("div.liveNum ul span.before");
             const baseDate: string = $("div.liveNumOuter span.livedate").text();
+            const personDataArr: IPersonStatus[] = [];
 
-            const confirmed: IPersonStatus = {
+            personDataArr.push({
                 total: totals.eq(0).text().split(')')[1],
                 before: befores.eq(0).eq(0).text().split('비 ')[1]
-            };
-            const cured: IPersonStatus = {
-                total: totals.eq(1).text(),
-                before: befores.eq(1).eq(0).text()
-            };
-            const curing: IPersonStatus = {
-                total: totals.eq(2).text(),
-                before: befores.eq(2).eq(0).text()
+            });
+            for (let i = 1; i < 4; i++) {
+                personDataArr.push({
+                    total: totals.eq(i).text(),
+                    before: befores.eq(i).eq(0).text()
+                });
             }
-            const dead: IPersonStatus = {
-                total: totals.eq(3).text(),
-                before: befores.eq(3).eq(0).text()
-            }
-            const result: IPatientStatus = { confirmed, cured, curing, dead };
+
+            const result: IPatientStatus = {
+                confirmed: personDataArr[0],
+                cured: personDataArr[1],
+                curing: personDataArr[2],
+                dead: personDataArr[3]
+            };
 
             return { baseDate, result };
         } catch (err) {
