@@ -1,4 +1,4 @@
-# Corona Solution [![Build Status](https://travis-ci.com/HoseungJang/coronavirus.svg?branch=master)](https://travis-ci.com/HoseungJang/coronavirus)
+# Corona Solution [![Build Status](https://travis-ci.com/HoseungJang/coronaSolution.svg?branch=master)](https://travis-ci.com/HoseungJang/coronaSolution)
 
 코로나 솔루션 서버
 
