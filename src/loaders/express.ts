@@ -12,6 +12,6 @@ export default ({ app }: { app: Application }) => {
     });
 
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-        res.sendStatus(err.status || 500);
+        res.sendStatus(err.status ?? 500);
     });
 };
