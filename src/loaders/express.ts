@@ -5,7 +5,8 @@ export default ({ app }: { app: Application }) => {
     app.use("/api", routes());
     
     app.use((req: Request, res: Response, next: NextFunction) => {
-        const err = new Error("Not Found");
+        const err: Error = new Error("Not Found");
+
         err["status"] = 404;
         next(err);
     });
