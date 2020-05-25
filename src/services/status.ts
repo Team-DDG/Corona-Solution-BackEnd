@@ -3,10 +3,14 @@ import * as cheerio from "cheerio";
 import { Service } from "typedi";
 import { IPersonStatus, ISidoStatus, IPatientStatus, IHospitalStatus } from "../interfaces/IStatus";
 import { ILocationDTO } from "../interfaces/ILocation";
-import { getManager } from "typeorm";
+import { InjectManager } from "typeorm-typedi-extensions";
 
 @Service()
 export default class StatusService {
+    constructor(
+        @InjectManager() private entityManager: Typeorm.Manager
+    ) { }
+
     public async getSidoStatus(): Promise<{ baseDate: string, result: ISidoStatus[] }> {
         try {
             const { data } = await axios.get("http://ncov.mohw.go.kr/");
@@ -48,6 +52,7 @@ export default class StatusService {
                 total: totals.eq(0).text().split(')')[1],
                 before: befores.eq(0).eq(0).text().split('비 ')[1]
             });
+
             for (let i = 1; i < 4; i++) {
                 personDataArr.push({
                     total: totals.eq(i).text(),
@@ -70,8 +75,7 @@ export default class StatusService {
 
     public async getHospitalStatus({ lat, lng }: ILocationDTO, table: 'clinic' | 'hospital'): Promise<{ result: IHospitalStatus[] }> {
         try {
-            const manager = getManager();
-            const infos = await manager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from ${table} having distance <= 3 order by distance;`);
+            const infos = await this.entityManager.query(`select *, (6371*acos(cos(radians(${lat}))*cos(radians(lat))*cos(radians(lng)-radians(${lng}))+sin(radians(${lat}))*sin(radians(lat)))) as distance from ${table} having distance <= 3 order by distance;`);
             const result: IHospitalStatus[] = [];
 
             infos.forEach((info: IHospitalStatus) => {
